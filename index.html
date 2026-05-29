@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dry Mouth Relief Finder</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  margin: 0;
+  padding: 16px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: #ffffff;
+  color: #1a1a1a;
+}
+.widget {
+  max-width: 520px;
+  margin: 0 auto;
+}
+.widget-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.widget-header h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1B3A2F;
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+.widget-header p {
+  font-size: 13px;
+  color: #5a7a6e;
+  margin: 0;
+}
+.question-block {
+  margin-bottom: 18px;
+}
+.question-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1B3A2F;
+  margin-bottom: 10px;
+  display: block;
+}
+.options-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.opt-btn {
+  flex: 1;
+  min-width: 100px;
+  padding: 10px 12px;
+  border: 1.5px solid #c8dbd5;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #1B3A2F;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  text-align: center;
+  line-height: 1.3;
+}
+.opt-btn:hover {
+  border-color: #1B3A2F;
+  background: #f0f7f4;
+}
+.opt-btn.selected {
+  border-color: #1B3A2F;
+  background: #1B3A2F;
+  color: #ffffff;
+}
+.divider {
+  height: 1px;
+  background: #e8f0ec;
+  margin: 18px 0;
+}
+.result-card {
+  border-radius: 14px;
+  background: #f0f7f4;
+  border: 1.5px solid #c8dbd5;
+  padding: 18px;
+  display: none;
+  animation: fadeUp 0.3s ease;
+}
+.result-card.visible {
+  display: block;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.result-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #5a7a6e;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
+}
+.result-headline {
+  font-size: 17px;
+  font-weight: 700;
+  color: #1B3A2F;
+  margin-bottom: 10px;
+  line-height: 1.3;
+}
+.tips-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 14px;
+}
+.tips-list li {
+  font-size: 13px;
+  color: #2d5244;
+  padding: 6px 0;
+  border-bottom: 1px solid #daeee5;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  line-height: 1.4;
+}
+.tips-list li:last-child {
+  border-bottom: none;
+}
+.tip-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #1B3A2F;
+  flex-shrink: 0;
+  margin-top: 5px;
+}
+.reset-btn {
+  width: 100%;
+  padding: 10px;
+  border: 1.5px solid #c8dbd5;
+  border-radius: 10px;
+  background: transparent;
+  color: #1B3A2F;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  margin-top: 4px;
+}
+.reset-btn:hover {
+  background: #e8f4ee;
+}
+.progress-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #c8dbd5;
+  transition: background 0.2s;
+}
+.dot.active {
+  background: #1B3A2F;
+}
+.cta-note {
+  font-size: 12px;
+  color: #8aab9d;
+  text-align: center;
+  margin-top: 12px;
+}
+</style>
+</head>
+<body>
+
+<div class="widget" role="main">
+  <h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">Cotton mouth relief quiz: find your best fix based on when and how you use edibles</h2>
+
+  <div class="widget-header">
+    <h2>Find your cotton mouth fix 💧</h2>
+    <p>Answer 2 quick questions for a personalized remedy</p>
+  </div>
+
+  <div class="progress-dots" id="progress">
+    <div class="dot active" id="dot-0"></div>
+    <div class="dot" id="dot-1"></div>
+    <div class="dot" id="dot-2"></div>
+  </div>
+
+  <div id="q1-block" class="question-block">
+    <span class="question-label">When do you usually take edibles?</span>
+    <div class="options-row">
+      <button class="opt-btn" data-q="1" data-v="daytime" onclick="selectOption(this, 1)">During the day</button>
+      <button class="opt-btn" data-q="1" data-v="evening" onclick="selectOption(this, 1)">Evening</button>
+      <button class="opt-btn" data-q="1" data-v="night" onclick="selectOption(this, 1)">Before bed</button>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div id="q2-block" class="question-block">
+    <span class="question-label">How would you describe the dryness?</span>
+    <div class="options-row">
+      <button class="opt-btn" data-q="2" data-v="mild" onclick="selectOption(this, 2)">Mild — just noticeable</button>
+      <button class="opt-btn" data-q="2" data-v="moderate" onclick="selectOption(this, 2)">Pretty dry, distracting</button>
+      <button class="opt-btn" data-q="2" data-v="intense" onclick="selectOption(this, 2)">Desert levels 😅</button>
+    </div>
+  </div>
+
+  <div class="result-card" id="result-card">
+    <div class="result-title">Your personalized fix</div>
+    <div class="result-headline" id="result-headline"></div>
+    <ul class="tips-list" id="tips-list"></ul>
+    <button class="reset-btn" onclick="resetQuiz()">Start over</button>
+    <p class="cta-note">Lower-potency and THC:CBD blends tend to cause less dryness overall.</p>
+  </div>
+</div>
+
+<script>
+var answers = { 1: null, 2: null };
+
+var tips = {
+  daytime: {
+    mild: {
+      headline: "Keep it simple — sip and chew",
+      items: [
+        "Keep a water bottle nearby and take steady sips throughout the day",
+        "Chew sugar-free gum to trigger saliva naturally while you go about your day",
+        "Snack on cucumber or watermelon slices — they hydrate and stimulate salivary glands",
+        "Avoid coffee and alcohol, which both reduce saliva production"
+      ]
+    },
+    moderate: {
+      headline: "Sour flavors are your best friend",
+      items: [
+        "Suck on lemon wedges or sour sugar-free candy — sour triggers a strong salivary response",
+        "Alternate between water and herbal teas like green tea for variety and soothing relief",
+        "Try an alcohol-free mouthwash for extra moisture that lasts longer than water alone",
+        "Consider a lower-potency option next time — higher THC directly intensifies dryness"
+      ]
+    },
+    intense: {
+      headline: "Go on the offensive before it starts",
+      items: [
+        "Start hydrating 1 hour before you take anything — don't wait until you're already dry",
+        "Pick up Lubricity Dry Mouth Spray or XyliMelts for targeted, lasting relief",
+        "Eat water-rich foods that require chewing (apples, celery) right before and during",
+        "A balanced THC:CBD product may cause noticeably less dryness than THC-only options"
+      ]
+    }
+  },
+  evening: {
+    mild: {
+      headline: "Wind down comfortably with these easy habits",
+      items: [
+        "Sip herbal tea in the evening — it hydrates and has a naturally soothing effect",
+        "Keep sugar-free gum or a small dish of sour candy nearby while you relax",
+        "Set a humidifier at 40–60% humidity in the room you're in",
+        "Drink a full glass of water before your experience begins"
+      ]
+    },
+    moderate: {
+      headline: "Layer a few simple remedies for real relief",
+      items: [
+        "Combine water sipping with sugar-free gum — the two together work better than either alone",
+        "Use an alcohol-free mouthwash rinse for longer-lasting comfort",
+        "Snack on oranges or grapes — natural sugars won't dry you out the way alcohol or coffee do",
+        "Try a lower-dose product next time — 5mg vs 15mg makes a meaningful difference in dryness"
+      ]
+    },
+    intense: {
+      headline: "Set up your space before you start",
+      items: [
+        "Pre-hydrate aggressively — water + water-rich foods an hour before",
+        "Have XyliMelts or Lubricity Dry Mouth Spray on your nightstand ready to go",
+        "Run a humidifier in the room and skip any alcohol this evening",
+        "A THC:CBD balanced product (like our Sleep Gummies) may feel noticeably gentler"
+      ]
+    }
+  },
+  night: {
+    mild: {
+      headline: "A little prep makes morning easy",
+      items: [
+        "Set a glass of water on your nightstand before bed — you'll thank yourself later",
+        "Use a humidifier set to 40–60% humidity to prevent overnight drying",
+        "Saliva naturally drops while you sleep, so even mild dryness can feel worse by morning",
+        "Good oral hygiene before bed protects against the cavity risk that dry mouth can raise"
+      ]
+    },
+    moderate: {
+      headline: "Build a bedtime routine around moisture",
+      items: [
+        "Put XyliMelts oral discs on before sleep — they release moisture slowly overnight",
+        "Place water and a sour candy on the nightstand for if you wake up dry",
+        "Run a humidifier and keep a window cracked — dry air compounds the effect",
+        "Brush and floss before bed — reduced saliva overnight increases cavity risk"
+      ]
+    },
+    intense: {
+      headline: "Overnight dryness needs overnight solutions",
+      items: [
+        "XyliMelts are the gold standard here — they're specifically designed for overnight moisture release",
+        "Hydrate fully before lying down and keep water within reach",
+        "A humidifier at 40–60% humidity is not optional — it makes a significant difference",
+        "Lower-potency or CBD-forward products before bed may give you better rest with less dryness"
+      ]
+    }
+  }
+};
+
+function selectOption(el, qNum) {
+  var siblings = el.parentNode.querySelectorAll('.opt-btn');
+  siblings.forEach(function(b) { b.classList.remove('selected'); });
+  el.classList.add('selected');
+  answers[qNum] = el.getAttribute('data-v');
+  updateProgress();
+  if (answers[1] && answers[2]) {
+    showResult();
+  }
+}
+
+function updateProgress() {
+  var filled = (answers[1] ? 1 : 0) + (answers[2] ? 1 : 0);
+  document.getElementById('dot-0').classList.toggle('active', true);
+  document.getElementById('dot-1').classList.toggle('active', filled >= 1);
+  document.getElementById('dot-2').classList.toggle('active', filled >= 2);
+}
+
+function showResult() {
+  var timing = answers[1];
+  var severity = answers[2];
+  var data = tips[timing][severity];
+
+  document.getElementById('result-headline').textContent = data.headline;
+  var ul = document.getElementById('tips-list');
+  ul.innerHTML = '';
+  data.items.forEach(function(tip) {
+    var li = document.createElement('li');
+    li.innerHTML = '<span class="tip-dot"></span><span>' + tip + '</span>';
+    ul.appendChild(li);
+  });
+
+  var card = document.getElementById('result-card');
+  card.classList.remove('visible');
+  setTimeout(function() { card.classList.add('visible'); }, 10);
+  card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function resetQuiz() {
+  answers = { 1: null, 2: null };
+  document.querySelectorAll('.opt-btn').forEach(function(b) { b.classList.remove('selected'); });
+  document.getElementById('result-card').classList.remove('visible');
+  document.getElementById('dot-1').classList.remove('active');
+  document.getElementById('dot-2').classList.remove('active');
+}
+</script>
+
+</body>
+</html>
